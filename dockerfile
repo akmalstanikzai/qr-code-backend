@@ -1,23 +1,23 @@
-# Use official Node.js LTS runtime as base image
+# Use official Node.js LTS runtime
 FROM node:20-alpine
 
-# Set working directory in the container
+# Set working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json
+# Copy dependency files first
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install --production
+RUN npm install
 
-# Copy application source code
+# Copy source code
 COPY . .
 
-# Expose the port the app runs on
-EXPOSE 4000
+# App port (match server.js)
+EXPOSE 5000
 
-# Set environment to production
+# Production mode
 ENV NODE_ENV=production
 
-# Start the application
+# Start app
 CMD ["node", "server.js"]
