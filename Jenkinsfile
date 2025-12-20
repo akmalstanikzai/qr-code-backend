@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        ENV_FILE = "/home/ubuntu/backend.env"
+        ENV_FILE = "/var/lib/jenkins/env/backend.env"
         CONTAINER_NAME = "qr-backend"
         IMAGE_NAME = "qr-backend"
         PORT = "5000"
@@ -24,24 +24,24 @@ pipeline {
 
         stage('Stop Old Container') {
             steps {
-                sh """
-                if [ \$(docker ps -q -f name=${CONTAINER_NAME}) ]; then
+                sh '''
+                if [ "$(docker ps -q -f name=${CONTAINER_NAME})" ]; then
                     docker stop ${CONTAINER_NAME}
                     docker rm ${CONTAINER_NAME}
                 fi
-                """
+                '''
             }
         }
 
         stage('Run New Container') {
             steps {
-                sh """
+                sh '''
                 docker run -d \
-                --name ${CONTAINER_NAME} \
-                -p ${PORT}:${PORT} \
-                --env-file ${ENV_FILE} \
-                ${IMAGE_NAME}
-                """
+                  --name ${CONTAINER_NAME} \
+                  -p ${PORT}:${PORT} \
+                  --env-file ${ENV_FILE} \
+                  ${IMAGE_NAME}
+                '''
             }
         }
     }
